@@ -1,5 +1,9 @@
 /**
  * An application with a basic interactive map. You can zoom and pan the map.
+ * TODO: the circle needs a ton of work
+ * TODO: Add in the data from the input/ folder
+ * TODO: steal the shape of the earthquake circle
+ * TODO: animate it like found on the processing page for "pulse"
  */
 
 import de.fhpotsdam.unfolding.*;
