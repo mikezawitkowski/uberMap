@@ -1,11 +1,14 @@
 /**
- * An application with a basic interactive map. You can zoom and pan the map.
+ * An application with a basic interactive map.
+ * You can zoom and pan the map.
+ * The map is populated with uber NYC data.
  * TODO: the circle needs a ton of work
  * TODO: Add in the data from the input/ folder
  * TODO: steal the shape of the earthquake circle
  * TODO: animate it like found on the processing page for "pulse"
+ * TODO: add scrollbar https://processing.org/examples/scrollbar.html
+ *
  */
-
 import de.fhpotsdam.unfolding.*;
 import de.fhpotsdam.unfolding.geo.*;
 import de.fhpotsdam.unfolding.utils.*;
