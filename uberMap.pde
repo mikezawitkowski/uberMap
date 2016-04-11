@@ -17,22 +17,38 @@ import de.fhpotsdam.unfolding.mapdisplay.MapDisplayFactory;
 import de.fhpotsdam.unfolding.marker.*;
 
 UnfoldingMap map;
+ArrayList<PVector> pastMouses;
+
+SimplePointMarker diabloMarker;
+SimplePointMarker sfoMarker;
+SimplePointMarker nycMarker;
+
 AbstractMapProvider provider1;
 AbstractMapProvider provider2;
 AbstractMapProvider provider3;
 
-int circleSize = 0;
+int MAX_PULSES = 1000; // max number of events on-screen
+int numPulses = 0; // initial number of events on-screen
+
+Pulse pulses[] = new Pulse[MAX_PULSES]; // pulse array
+
+// int circleSize = 0;
+// int num = 60;
+// float mx[] = new float[num];
+// float my[] = new float[num];
 
 
 void setup() {
+
   size(800, 600, P2D);
 
   // Info about the cirlce I'll be adding
-  ellipseMode(CENTER);
-  frameRate(1);
-  noStroke();
-  background(220, 220, 255);
-  fill(255, 0, 255);
+  // ellipseMode(CENTER);
+  // frameRate(30);
+  // noStroke();
+  // background(220, 220, 255);
+  // fill(255, 0, 255);
+  // fill(255, 50);
   smooth();
 
   // Ability to change the map background
@@ -40,34 +56,81 @@ void setup() {
   provider2 = new OpenStreetMap.OpenStreetMapProvider();
   provider3 = new Microsoft.AerialProvider();
 
-
-  // map = new UnfoldingMap(this, new OpenStreetMap.OpenStreetMapProvider());
-  map = new UnfoldingMap(this, provider5);
-  // map = new UnfoldingMap(this, new Microsoft.AerialProvider());
-  map.zoomAndPanTo(new Location(37.87f, -122.07f), 10);
-
+  map = new UnfoldingMap(this, provider2);
+  map.zoomAndPanTo(new Location(37.87f, -122.07f), 5);
   MapUtils.createDefaultEventDispatcher(this, map);
+
+  Location diabloLocation = new Location(37.87f, -122.07f);
+  diabloMarker = new SimplePointMarker(diabloLocation);
+  Location sfoLocation = new Location(37.61f, -122.37f);
+  sfoMarker = new SimplePointMarker(sfoLocation);
+  Location nycLocation = new Location(40.7586f, -73.9706f);
+  nycMarker = new SimplePointMarker(nycLocation);
+
+  pastMouses = new ArrayList<PVector>();
 }
 
 void draw() {
   map.draw();
 
-  Location mapLocation1 = new Location(37.87f, -122.07f);
+  ScreenPosition diabloPos = diabloMarker.getScreenPosition(map);
+  strokeWeight(5);
+  // stroke(67, 211, 227, 100);
+  stroke(178, 34, 34, 200); // Red
+  noFill();
+  ellipse(diabloPos.x, diabloPos.y, 16, 16); // was 36. 36
 
-  // Create point markers for locations
-  SimplePointMarker mapMarker1 = new SimplePointMarker(mapLocation1);
-  map.addMarkers(mapMarker1);
+  ScreenPosition nycPos = nycMarker.getScreenPosition(map);
+  strokeWeight(3);
+  // stroke(67, 211, 227, 100);
+  stroke(178, 34, 34, 100); // Red
+  noFill();
+  ellipse(nycPos.x, nycPos.y, 26, 26); // was 36. 36
+
+
+  ScreenPosition sfoPos = sfoMarker.getScreenPosition(map);
+  strokeWeight(5);
+  // stroke(67, 211, 227, 100);
+  stroke(178, 34, 34, 50); // Red
+  noFill();
+  ellipse(sfoPos.x, sfoPos.y, 36, 36); // was 36. 36
+
+  // map.addMarkers(diabloMarker);
+
+  // Adapt style
+  // diabloMarker.setColor(color(255, 0, 0, 100));
+  // diabloMarker.setStrokeColor(color(255, 0, 0));
+  // diabloMarker.setStrokeWeight(1);
 
   // Animate the circle
-  if (circleSize <= 100) {
-      circleSize += 1;
-  }
-  ellipse(width/2, height/2, circleSize, circleSize);
+  // if (circleSize <= 100) {
+  //     circleSize += 3;
+  // }
+  // ellipse(width/2, height/2, circleSize, circleSize);
 
+  // more circle animation stuff
+  // Cycle through the array, using a different entry on each frame.
+  // Using modulo (%) like this is faster than moving all the values over.
+  // int which = frameCount % num;
+  // mx[which] = mouseX;
+  // my[which] = mouseY;
+  //
+  // for (int i = 0; i < num; i++) {
+  //   // which+1 is the smallest (the oldest in the array)
+  //   int index = (which+1 + i) % num;
+  //   ellipse(mx[index], my[index], i, i);
+  //   tint(255, 127);
+  // }
+  //
   // Mouse shows the location coordinates
   Location location = map.getLocation(mouseX, mouseY);
   fill(0);
   text(location.getLat() + ", " + location.getLon(), mouseX, mouseY);
+
+  for (int i=0; i < numPulses; i++) { // for all of the pulses that exist
+    pulses[i].draw(); // draw ALL THE PULSES!!!!1
+  }
+
 }
 
 // void keyPressed() {
